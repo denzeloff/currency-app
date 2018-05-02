@@ -5,8 +5,6 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.denzeloff.currencyapp.jsonObj.CurrencyJsonModel;
-import pl.denzeloff.currencyapp.jsonObj.Rates;
 import pl.denzeloff.currencyapp.model.CurrencyCode;
 import pl.denzeloff.currencyapp.service.CurrencyAppService;
 
@@ -16,22 +14,30 @@ import java.time.LocalDate;
 @Theme("valo")
 public class CurrencyAppUI extends UI {
     private CurrencyAppService currencyAppService;
+    private DateField startDate = new DateField("Start Date", LocalDate.now());
+    private DateField endDate = new DateField("End Date", LocalDate.now());
+    private Button getMethodButton = new Button("GET");
+    private ComboBox<CurrencyCode> listOfCurrencyCode = new ComboBox<>("Choose currency code");
+    private Label averageLabel = new Label();
+
 
     @Autowired
     public CurrencyAppUI(CurrencyAppService currencyAppService) {
         this.currencyAppService = currencyAppService;
     }
 
+    public CurrencyAppUI() {
+    }
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        Button getMethodButton = new Button("GET");
-        DateField startDate = new DateField("Start Date", LocalDate.now());
-        DateField endDate = new DateField("End Date", LocalDate.now());
 
-        ComboBox<CurrencyCode> listOfCurrencyCode = new ComboBox<>("Choose currency code");
+        averageLabel.setVisible(false);
+        averageLabel.setCaption("Average");
+
         listOfCurrencyCode.setEmptySelectionAllowed(false);
         listOfCurrencyCode.setItems(CurrencyCode.values());
+        listOfCurrencyCode.setSelectedItem(CurrencyCode.valueOf("USD"));
 
         VerticalLayout currencyCodeLayout = new VerticalLayout(listOfCurrencyCode);
         currencyCodeLayout.setSpacing(true);
@@ -41,13 +47,27 @@ public class CurrencyAppUI extends UI {
         dateLayout.setMargin(true);
         dateLayout.setSpacing(true);
 
-        VerticalLayout mainLayout = new VerticalLayout(currencyCodeLayout, dateLayout, getMethodButton);
+        VerticalLayout mainLayout = new VerticalLayout(currencyCodeLayout, dateLayout, getMethodButton, averageLabel);
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
         setContent(mainLayout);
+
+
         getMethodButton.addClickListener(e -> {
-            CurrencyJsonModel currencyJsonModel = currencyAppService.getCurrencyJsonObj(startDate.getValue().toString(), endDate.getValue().toString(), listOfCurrencyCode.getValue().toString());
-            System.out.println(currencyAppService.listOfBuyingCostCurrency(currencyJsonModel));
+            averageLabel.setValue(currencyAppService.averageCurrencyCost(currencyAppService.listOfBuyingCostCurrency(currencyAppService.getCurrencyJsonObj(getListOfCurrencyCode(), getStartDate(), getEndDate()))).toString());
+            averageLabel.setVisible(true);
         });
+    }
+
+    private String getStartDate() {
+        return startDate.getValue().toString();
+    }
+
+    private String getEndDate() {
+        return endDate.getValue().toString();
+    }
+
+    private String getListOfCurrencyCode() {
+        return listOfCurrencyCode.getValue().toString();
     }
 }
