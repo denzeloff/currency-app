@@ -5,6 +5,8 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.denzeloff.currencyapp.jsonObj.CurrencyJsonModel;
+import pl.denzeloff.currencyapp.jsonObj.Rates;
 import pl.denzeloff.currencyapp.model.CurrencyCode;
 import pl.denzeloff.currencyapp.service.CurrencyAppService;
 
@@ -44,8 +46,8 @@ public class CurrencyAppUI extends UI {
         mainLayout.setSpacing(true);
         setContent(mainLayout);
         getMethodButton.addClickListener(e -> {
-            System.out.println(currencyAppService.getCurrencyJsonObj(startDate.getValue().toString(), endDate.getValue().toString(), listOfCurrencyCode.getValue().toString()).toString());
-
+            CurrencyJsonModel currencyJsonModel = currencyAppService.getCurrencyJsonObj(startDate.getValue().toString(), endDate.getValue().toString(), listOfCurrencyCode.getValue().toString());
+            System.out.println(currencyAppService.listOfBuyingCostCurrency(currencyJsonModel));
         });
     }
 }
