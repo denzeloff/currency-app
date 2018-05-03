@@ -88,7 +88,7 @@ public class CurrencyAppUI extends UI {
                 if (e1.getStatusCode().equals(HttpStatus.NOT_FOUND))
                     Notification.show("Sorry, but we don't have date for selected range", Notification.Type.WARNING_MESSAGE);
                 else if (e1.getStatusCode().equals(HttpStatus.BAD_REQUEST))
-                    Notification.show("Pleas choose correct range", Notification.Type.WARNING_MESSAGE);
+                    Notification.show("Please choose correct range", Notification.Type.WARNING_MESSAGE);
             }
         });
     }
