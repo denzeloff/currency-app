@@ -7,10 +7,13 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import pl.denzeloff.currencyapp.jsonObj.CurrencyJsonModel;
 import pl.denzeloff.currencyapp.model.CurrencyCode;
 import pl.denzeloff.currencyapp.service.CurrencyAppService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -24,6 +27,8 @@ public class CurrencyAppUI extends UI {
     private Button getMethodButton = new Button("GET");
     private ComboBox<CurrencyCode> listOfCurrencyCode = new ComboBox<>("Choose currency code");
     private Label averageLabel = new Label();
+    private Label standardDeviationLabel = new Label();
+
 
 
     @Autowired
@@ -39,6 +44,8 @@ public class CurrencyAppUI extends UI {
 
         averageLabel.setVisible(false);
         averageLabel.setCaption("Average");
+        standardDeviationLabel.setVisible(false);
+        standardDeviationLabel.setCaption("Standard deviation");
 
         listOfCurrencyCode.setEmptySelectionAllowed(false);
         listOfCurrencyCode.setItems(CurrencyCode.values());
@@ -52,7 +59,7 @@ public class CurrencyAppUI extends UI {
         dateLayout.setMargin(true);
         dateLayout.setSpacing(true);
 
-        VerticalLayout mainLayout = new VerticalLayout(currencyCodeLayout, dateLayout, getMethodButton, averageLabel);
+        VerticalLayout mainLayout = new VerticalLayout(currencyCodeLayout, dateLayout, getMethodButton, averageLabel, standardDeviationLabel);
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
         setContent(mainLayout);
@@ -82,12 +89,18 @@ public class CurrencyAppUI extends UI {
 
         getMethodButton.addClickListener(e -> {
             try {
-                averageLabel.setValue(currencyAppService.averageCurrencyCost(currencyAppService.listOfBuyingCostCurrency(currencyAppService.getCurrencyJsonObj(getListOfCurrencyCode(), getStartDate(), getEndDate()))).toString());
+                CurrencyJsonModel objectModel = currencyAppService.getCurrencyJsonObj(getListOfCurrencyCode(), getStartDate(), getEndDate());
+                List<BigDecimal> listOfBuyingCostCurrency = currencyAppService.listOfBuyingCostCurrency(objectModel);
+                BigDecimal averageOfBuyingCostCurrency = currencyAppService.averageCurrencyCost(listOfBuyingCostCurrency);
+                BigDecimal standardDeviationOfBuyingCostCurrency = currencyAppService.standardDeviation(listOfBuyingCostCurrency);
+                averageLabel.setValue(averageOfBuyingCostCurrency.toString());
                 averageLabel.setVisible(true);
+                standardDeviationLabel.setValue(standardDeviationOfBuyingCostCurrency.toString());
+                standardDeviationLabel.setVisible(true);
             } catch (HttpClientErrorException e1) {
-                if (e1.getStatusCode().equals(HttpStatus.NOT_FOUND))
-                    Notification.show("Sorry, but we don't have date for selected range", Notification.Type.WARNING_MESSAGE);
-                else if (e1.getStatusCode().equals(HttpStatus.BAD_REQUEST))
+                if (HttpStatus.NOT_FOUND.equals(e1.getStatusCode()))
+                    Notification.show("Sorry, but we don't have data for selected range", Notification.Type.WARNING_MESSAGE);
+                else if (HttpStatus.BAD_REQUEST.equals(e1.getStatusCode()))
                     Notification.show("Please choose correct range", Notification.Type.WARNING_MESSAGE);
             }
         });

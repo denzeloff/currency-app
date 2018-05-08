@@ -1,18 +1,19 @@
 package pl.denzeloff.currencyapp.service;
 
+import com.jidesoft.utils.BigDecimalMathUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.denzeloff.currencyapp.jsonObj.CurrencyJsonModel;
 import pl.denzeloff.currencyapp.jsonObj.Rates;
-
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
-public class CurrencyAppService {
+public class CurrencyAppService{
 
     public CurrencyJsonModel getCurrencyJsonObj(String code, String startDate, String endDate) {
         RestTemplate restTemplate = new RestTemplate();
@@ -38,6 +39,10 @@ public class CurrencyAppService {
         }
         average = sum.divide(length, 4, RoundingMode.CEILING);
         return average;
+    }
+    public BigDecimal standardDeviation(List<BigDecimal> listOfBuyingCostCurrency){
+        BigDecimal standardDeviation = BigDecimalMathUtils.stddev(listOfBuyingCostCurrency,false,MathContext.UNLIMITED);
+        return standardDeviation.setScale(4,RoundingMode.CEILING);
     }
 
 
