@@ -1,17 +1,17 @@
-package pl.denzeloff.currencyapp.jsonObj;
+package pl.denzeloff.currencyapp.jsonObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CurrencyJsonModel {
+public class CurrencyJSON {
     private String table;
     private String currency;
     private String code;
     private Rates[] rates;
 
-    public CurrencyJsonModel() {
+    public CurrencyJSON() {
     }
 
     public String getTable() {
@@ -48,7 +48,7 @@ public class CurrencyJsonModel {
 
     @Override
     public String toString() {
-        return "CurrencyJsonModel{" +
+        return "CurrencyJSON{" +
                 "table='" + table + '\'' +
                 ", currency='" + currency + '\'' +
                 ", code='" + code + '\'' +

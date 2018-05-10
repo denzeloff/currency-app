@@ -21,7 +21,7 @@ public class CurrencyAppService {
         return restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/rates/C/" + code + "/" + startDate + "/" + endDate + "/?format=json", CurrencyJSON.class);
     }
 
-    public List<BigDecimal> listOfBuyingCostCurrency(CurrencyJSON currencyJSON) {
+    public List<BigDecimal> getListOfBuyingCostCurrency(CurrencyJSON currencyJSON) {
         Rates rates[] = currencyJSON.getRates();
         List<BigDecimal> listOfCurrBuyingCost = new ArrayList<>();
         for (int i = 0; i < rates.length; i++) {
@@ -31,7 +31,7 @@ public class CurrencyAppService {
         return listOfCurrBuyingCost;
     }
 
-    public BigDecimal averageValueOfCurrencyPurchase(List<BigDecimal> listOfBuyingCostCurrency) {
+    public BigDecimal calculateAverageValueOfCurrencyPurchase(List<BigDecimal> listOfBuyingCostCurrency) {
         BigDecimal average;
         BigDecimal length = new BigDecimal(listOfBuyingCostCurrency.size());
         BigDecimal sum = new BigDecimal(0);
@@ -42,7 +42,7 @@ public class CurrencyAppService {
         return average;
     }
 
-    public BigDecimal standardDeviationOfCurrencyPurchaseCost(List<BigDecimal> listOfBuyingCostCurrency) {
+    public BigDecimal calculateStandardDeviationOfCurrencyPurchaseCost(List<BigDecimal> listOfBuyingCostCurrency) {
         BigDecimal standardDeviation = BigDecimalMathUtils.stddev(listOfBuyingCostCurrency, false, MathContext.UNLIMITED);
         return standardDeviation.setScale(4, RoundingMode.CEILING);
     }

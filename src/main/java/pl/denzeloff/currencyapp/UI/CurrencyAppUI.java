@@ -89,9 +89,9 @@ public class CurrencyAppUI extends UI {
         getMethodButton.addClickListener(e -> {
             try {
                 CurrencyJSON currencyJSON = currencyAppService.getCurrencyJsonObj(getListOfCurrencyCode(), getStartDate(), getEndDate());
-                List<BigDecimal> listOfBuyingCostCurrency = currencyAppService.listOfBuyingCostCurrency(currencyJSON);
-                BigDecimal averageValueOfBuyingCostCurrency = currencyAppService.averageValueOfCurrencyPurchase(listOfBuyingCostCurrency);
-                BigDecimal standardDeviationOfBuyingCostCurrency = currencyAppService.standardDeviationOfCurrencyPurchaseCost(listOfBuyingCostCurrency);
+                List<BigDecimal> listOfBuyingCostCurrency = currencyAppService.getListOfBuyingCostCurrency(currencyJSON);
+                BigDecimal averageValueOfBuyingCostCurrency = currencyAppService.calculateAverageValueOfCurrencyPurchase(listOfBuyingCostCurrency);
+                BigDecimal standardDeviationOfBuyingCostCurrency = currencyAppService.calculateStandardDeviationOfCurrencyPurchaseCost(listOfBuyingCostCurrency);
                 averageLabel.setValue(averageValueOfBuyingCostCurrency.toString());
                 averageLabel.setVisible(true);
                 standardDeviationLabel.setValue(standardDeviationOfBuyingCostCurrency.toString());
