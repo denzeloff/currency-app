@@ -33,17 +33,17 @@ public class CurrencyAppService {
 
     public BigDecimal calculateAverageValueOfCurrencyPurchase(List<BigDecimal> listOfBuyingCostCurrency) {
         BigDecimal average;
-        BigDecimal length = new BigDecimal(listOfBuyingCostCurrency.size());
+        BigDecimal amountOfPrices = new BigDecimal(listOfBuyingCostCurrency.size());
         BigDecimal sum = new BigDecimal(0);
         for (int i = 0; i < listOfBuyingCostCurrency.size(); i++) {
             sum = sum.add(listOfBuyingCostCurrency.get(i));
         }
-        average = sum.divide(length, 4, RoundingMode.CEILING);
+        average = sum.divide(amountOfPrices, 4, RoundingMode.CEILING);
         return average;
     }
 
     public BigDecimal calculateStandardDeviationOfCurrencyPurchaseCost(List<BigDecimal> listOfBuyingCostCurrency) {
-        BigDecimal standardDeviation = BigDecimalMathUtils.stddev(listOfBuyingCostCurrency, false, MathContext.UNLIMITED);
+        BigDecimal standardDeviation = BigDecimalMathUtils.stddev(listOfBuyingCostCurrency, false, MathContext.DECIMAL32);
         return standardDeviation.setScale(4, RoundingMode.CEILING);
     }
 
