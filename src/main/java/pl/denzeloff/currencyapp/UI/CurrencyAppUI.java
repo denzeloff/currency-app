@@ -7,7 +7,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
-import pl.denzeloff.currencyapp.jsonObj.CurrencyJsonModel;
+import pl.denzeloff.currencyapp.jsonObject.CurrencyJSON;
 import pl.denzeloff.currencyapp.model.CurrencyCode;
 import pl.denzeloff.currencyapp.service.CurrencyAppService;
 
@@ -28,7 +28,6 @@ public class CurrencyAppUI extends UI {
     private ComboBox<CurrencyCode> listOfCurrencyCode = new ComboBox<>("Choose currency code");
     private Label averageLabel = new Label();
     private Label standardDeviationLabel = new Label();
-
 
 
     @Autowired
@@ -89,11 +88,11 @@ public class CurrencyAppUI extends UI {
 
         getMethodButton.addClickListener(e -> {
             try {
-                CurrencyJsonModel objectModel = currencyAppService.getCurrencyJsonObj(getListOfCurrencyCode(), getStartDate(), getEndDate());
-                List<BigDecimal> listOfBuyingCostCurrency = currencyAppService.listOfBuyingCostCurrency(objectModel);
-                BigDecimal averageOfBuyingCostCurrency = currencyAppService.averageCurrencyCost(listOfBuyingCostCurrency);
-                BigDecimal standardDeviationOfBuyingCostCurrency = currencyAppService.standardDeviation(listOfBuyingCostCurrency);
-                averageLabel.setValue(averageOfBuyingCostCurrency.toString());
+                CurrencyJSON currencyJSON = currencyAppService.getCurrencyJsonObj(getListOfCurrencyCode(), getStartDate(), getEndDate());
+                List<BigDecimal> listOfBuyingCostCurrency = currencyAppService.listOfBuyingCostCurrency(currencyJSON);
+                BigDecimal averageValueOfBuyingCostCurrency = currencyAppService.averageValueOfCurrencyPurchase(listOfBuyingCostCurrency);
+                BigDecimal standardDeviationOfBuyingCostCurrency = currencyAppService.standardDeviationOfCurrencyPurchaseCost(listOfBuyingCostCurrency);
+                averageLabel.setValue(averageValueOfBuyingCostCurrency.toString());
                 averageLabel.setVisible(true);
                 standardDeviationLabel.setValue(standardDeviationOfBuyingCostCurrency.toString());
                 standardDeviationLabel.setVisible(true);

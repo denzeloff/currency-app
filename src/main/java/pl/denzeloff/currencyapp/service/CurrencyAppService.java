@@ -3,8 +3,9 @@ package pl.denzeloff.currencyapp.service;
 import com.jidesoft.utils.BigDecimalMathUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import pl.denzeloff.currencyapp.jsonObj.CurrencyJsonModel;
-import pl.denzeloff.currencyapp.jsonObj.Rates;
+import pl.denzeloff.currencyapp.jsonObject.CurrencyJSON;
+import pl.denzeloff.currencyapp.jsonObject.Rates;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -13,15 +14,15 @@ import java.util.List;
 
 
 @Service
-public class CurrencyAppService{
+public class CurrencyAppService {
 
-    public CurrencyJsonModel getCurrencyJsonObj(String code, String startDate, String endDate) {
+    public CurrencyJSON getCurrencyJsonObj(String code, String startDate, String endDate) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/rates/C/" + code + "/" + startDate + "/" + endDate + "/?format=json", CurrencyJsonModel.class);
+        return restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/rates/C/" + code + "/" + startDate + "/" + endDate + "/?format=json", CurrencyJSON.class);
     }
 
-    public List<BigDecimal> listOfBuyingCostCurrency(CurrencyJsonModel currencyJsonModel) {
-        Rates rates[] = currencyJsonModel.getRates();
+    public List<BigDecimal> listOfBuyingCostCurrency(CurrencyJSON currencyJSON) {
+        Rates rates[] = currencyJSON.getRates();
         List<BigDecimal> listOfCurrBuyingCost = new ArrayList<>();
         for (int i = 0; i < rates.length; i++) {
             Rates rateObj = rates[i];
@@ -30,7 +31,7 @@ public class CurrencyAppService{
         return listOfCurrBuyingCost;
     }
 
-    public BigDecimal averageCurrencyCost(List<BigDecimal> listOfBuyingCostCurrency) {
+    public BigDecimal averageValueOfCurrencyPurchase(List<BigDecimal> listOfBuyingCostCurrency) {
         BigDecimal average;
         BigDecimal length = new BigDecimal(listOfBuyingCostCurrency.size());
         BigDecimal sum = new BigDecimal(0);
@@ -40,9 +41,10 @@ public class CurrencyAppService{
         average = sum.divide(length, 4, RoundingMode.CEILING);
         return average;
     }
-    public BigDecimal standardDeviation(List<BigDecimal> listOfBuyingCostCurrency){
-        BigDecimal standardDeviation = BigDecimalMathUtils.stddev(listOfBuyingCostCurrency,false,MathContext.UNLIMITED);
-        return standardDeviation.setScale(4,RoundingMode.CEILING);
+
+    public BigDecimal standardDeviationOfCurrencyPurchaseCost(List<BigDecimal> listOfBuyingCostCurrency) {
+        BigDecimal standardDeviation = BigDecimalMathUtils.stddev(listOfBuyingCostCurrency, false, MathContext.UNLIMITED);
+        return standardDeviation.setScale(4, RoundingMode.CEILING);
     }
 
 
