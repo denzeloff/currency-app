@@ -1,4 +1,4 @@
-package pl.denzeloff.currencyapp.UI;
+package pl.denzeloff.currencyapp.ui;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -7,7 +7,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
-import pl.denzeloff.currencyapp.jsonObject.CurrencyJSON;
+import pl.denzeloff.currencyapp.CurrencyDataPackage.CurrencyJSON;
 import pl.denzeloff.currencyapp.model.CurrencyCode;
 import pl.denzeloff.currencyapp.service.CurrencyAppService;
 
@@ -15,12 +15,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @SpringUI
 @Theme("valo")
-public class CurrencyAppUI extends UI {
+public class AppUI extends UI {
     private CurrencyAppService currencyAppService;
     private DateField startDate = new DateField("Start Date", LocalDate.now());
     private DateField endDate = new DateField("End Date", LocalDate.now());
@@ -31,11 +30,11 @@ public class CurrencyAppUI extends UI {
 
 
     @Autowired
-    public CurrencyAppUI(CurrencyAppService currencyAppService) {
+    public AppUI(CurrencyAppService currencyAppService) {
         this.currencyAppService = currencyAppService;
     }
 
-    public CurrencyAppUI() {
+    public AppUI() {
     }
 
     @Override
@@ -117,3 +116,4 @@ public class CurrencyAppUI extends UI {
         return listOfCurrencyCode.getValue().toString();
     }
 }
+
