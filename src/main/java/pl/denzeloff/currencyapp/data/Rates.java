@@ -1,4 +1,4 @@
-package pl.denzeloff.currencyapp.CurrencyDataPackage;
+package pl.denzeloff.currencyapp.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

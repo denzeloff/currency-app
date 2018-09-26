@@ -3,8 +3,8 @@ package pl.denzeloff.currencyapp.service;
 import com.jidesoft.utils.BigDecimalMathUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import pl.denzeloff.currencyapp.CurrencyDataPackage.CurrencyJSON;
-import pl.denzeloff.currencyapp.CurrencyDataPackage.Rates;
+import pl.denzeloff.currencyapp.data.CurrencyJSON;
+import pl.denzeloff.currencyapp.data.Rates;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

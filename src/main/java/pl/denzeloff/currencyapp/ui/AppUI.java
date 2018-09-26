@@ -7,7 +7,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
-import pl.denzeloff.currencyapp.CurrencyDataPackage.CurrencyJSON;
+import pl.denzeloff.currencyapp.data.CurrencyJSON;
 import pl.denzeloff.currencyapp.model.CurrencyCode;
 import pl.denzeloff.currencyapp.service.CurrencyAppService;
 
